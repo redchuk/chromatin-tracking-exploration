@@ -1,0 +1,583 @@
+python create_sbatch.py --job_name loop_epochs_k15 --loop_epochs 10 600 10 --options "--kernel_size=15 --repeats=20" --sbatch_dir sbatch/loop_epochs_k15 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+
+
+#
+# 20220422
+#
+
+conda activate jinja2
+
+python create_sbatch.py --job_name le_k15_f3 --loop_epochs 10 600 10 --options "--fset f_mot_morph_dyn --kernel_size=15 --repeats=20" --sbatch_dir sbatch/le_k15_f3 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_k15_f1 --loop_epochs 10 600 10 --options "--fset f_mot --kernel_size=15 --repeats=20" --sbatch_dir sbatch/le_k15_f1 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+conda deactivate
+(repeat until no conda environment selected)
+
+for s in $(ls sbatch/le_k15_f3/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k15_f1/*.sh); do sbatch $s; done;
+
+$ squeue -u hajaalin|wc -l
+120
+
+$ date
+Fri 22 Apr 16:52:10 EEST 2022
+
+
+#
+# 20220425
+#
+
+(base) hajaalin@dx5-biotek4:/home/ad/turso-proj/hajaalin/Projects/n_track_ML/output/cross-validation/le_k15_f2$ cp -r loop_epochs_k15 le_k15_f2
+
+(base) hajaalin@dx5-biotek4:/home/ad/turso-proj/hajaalin/Projects/n_track_ML/output/cross-validation/le_k15_f2$ ls |grep -v 202204211541
+cv_loop_epochs_k15_k15_e25_202204071123.csv
+cv_loop_epochs_k15_k15_e25_202204071616.csv
+cv_loop_epochs_k15_k15_e5_202204070955.csv
+cv_loop_epochs_k15_k15_e5_202204071616.csv
+
+rm cv_loop_epochs_k15_k15_e25_202204071123.csv cv_loop_epochs_k15_k15_e25_202204071616.csv cv_loop_epochs_k15_k15_e5_202204070955.csv cv_loop_epochs_k15_k15_e5_202204071616.csv
+
+# continue epochs from 600
+python create_sbatch.py --job_name le_k15_f1 --loop_epochs 600 1200 10 --options "--fset f_mot --kernel_size=15 --repeats=20" --sbatch_dir sbatch/le_k15_f1/2 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_k15_f2 --loop_epochs 600 1200 10 --options "--fset f_mot_morph --kernel_size=15 --repeats=20" --sbatch_dir sbatch/le_k15_f2/2 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_k15_f1/2/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k15_f2/2/*.sh); do sbatch $s; done;
+
+
+
+#
+# 20220426
+#
+
+source ~/.bashrc
+conda activate jinja2
+
+# continue epochs from 1200, only f1
+python create_sbatch.py --job_name le_k15_f1 --loop_epochs 1200 1800 10 --options "--fset f_mot --kernel_size=15 --repeats=20" --sbatch_dir sbatch/le_k15_f1/3 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_k15_f1/3/*.sh); do sbatch $s; done;
+
+
+
+#
+# 20220505
+#
+
+source ~/.bashrc
+conda activate jinja2
+
+# test some kernel_size values
+python create_sbatch.py --job_name k20_f1 --options "--fset f_mot --kernel_size=20 --epochs=1250 --repeats=20" --sbatch_dir sbatch/k20 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+sleep 61
+python create_sbatch.py --job_name k20_f2 --options "--fset f_mot_morph --kernel_size=20 --epochs=1000 --repeats=20" --sbatch_dir sbatch/k20 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+sleep 61
+python create_sbatch.py --job_name k20_f3 --options "--fset f_mot_morph_dyn --kernel_size=20 --epochs=200 --repeats=20" --sbatch_dir sbatch/k20 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+sleep 61
+
+python create_sbatch.py --job_name k15_f1 --options "--fset f_mot --kernel_size=15 --epochs=1250 --repeats=20" --sbatch_dir sbatch/k15 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+sleep 61
+python create_sbatch.py --job_name k15_f2 --options "--fset f_mot_morph --kernel_size=15 --epochs=1000 --repeats=20" --sbatch_dir sbatch/k15 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+sleep 61
+python create_sbatch.py --job_name k15_f3 --options "--fset f_mot_morph_dyn --kernel_size=15 --epochs=200 --repeats=20" --sbatch_dir sbatch/k15 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+sleep 61
+
+python create_sbatch.py --job_name k25_f1 --options "--fset f_mot --kernel_size=25 --epochs=1250 --repeats=20" --sbatch_dir sbatch/k25 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+sleep 61
+python create_sbatch.py --job_name k25_f2 --options "--fset f_mot_morph --kernel_size=25 --epochs=1000 --repeats=20" --sbatch_dir sbatch/k25 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+sleep 61
+python create_sbatch.py --job_name k25_f3 --options "--fset f_mot_morph_dyn --kernel_size=25 --epochs=200 --repeats=20" --sbatch_dir sbatch/k25 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+sleep 61
+
+python create_sbatch.py --job_name k30_f1 --options "--fset f_mot --kernel_size=30 --epochs=1250 --repeats=20" --sbatch_dir sbatch/k30 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+sleep 61
+python create_sbatch.py --job_name k30_f2 --options "--fset f_mot_morph --kernel_size=30 --epochs=1000 --repeats=20" --sbatch_dir sbatch/k30 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+sleep 61
+python create_sbatch.py --job_name k30_f3 --options "--fset f_mot_morph_dyn --kernel_size=30 --epochs=200 --repeats=20" --sbatch_dir sbatch/k30 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+conda deactivate
+conda deactivate
+for s in $(ls sbatch/k20/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/k15/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/k25/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/k30/*.sh); do sbatch $s; done;
+
+
+#
+# 22020507
+#
+
+# test code with normalization added and with a fixed feature set
+python create_sbatch.py --job_name norm_k20_f4 --options "--fset f_mot_morph_dyn_2 --kernel_size=20 --epochs=1250 --repeats=20" --sbatch_dir sbatch/norm_k20 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+
+
+#
+# 22020508
+#
+
+# rerun epoch loops now that normalization has been added in cv_inceptiontime.py
+### TODO repeat 30 times like Taras does (first check if they finish with 20)
+
+conda activate jinja2
+
+python create_sbatch.py --job_name le_norm_k20_f1 --loop_epochs 100 1400 20 --options "--fset f_mot --kernel_size=20 --repeats=20" --sbatch_dir sbatch/le_norm_k20_f1 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm_k20_f2 --loop_epochs 100 1000 20 --options "--fset f_mot_morph --kernel_size=20 --repeats=20" --sbatch_dir sbatch/le_norm_k20_f2 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm_k20_f3 --loop_epochs 100 500 20 --options "--fset f_mot_morph_dyn --kernel_size=20 --repeats=20" --sbatch_dir sbatch/le_norm_k20_f3 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm_k20_f4 --loop_epochs 100 500 20 --options "--fset f_mot_morph_dyn_2 --kernel_size=20 --repeats=20" --sbatch_dir sbatch/le_norm_k20_f4 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_norm_k20_f1/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_norm_k20_f2/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_norm_k20_f3/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_norm_k20_f4/*.sh); do sbatch $s; done;
+
+
+#
+# 22020509
+#
+
+# maybe the scaling was not correct, retry with a fixed version.
+# focus on smaller epoch numbers
+
+
+conda activate jinja2
+
+python create_sbatch.py --job_name le_norm2_k20_f1 --loop_epochs 10 300 10 --options "--fset f_mot --kernel_size=20 --repeats=20" --sbatch_dir sbatch/le_norm2_k20_f1 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm2_k20_f2 --loop_epochs 10 300 10 --options "--fset f_mot_morph --kernel_size=20 --repeats=20" --sbatch_dir sbatch/le_norm2_k20_f2 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm2_k20_f3 --loop_epochs 10 300 10 --options "--fset f_mot_morph_dyn --kernel_size=20 --repeats=20" --sbatch_dir sbatch/le_norm2_k20_f3 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm2_k20_f4 --loop_epochs 10 300 10 --options "--fset f_mot_morph_dyn_2 --kernel_size=20 --repeats=20" --sbatch_dir sbatch/le_norm2_k20_f4 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_norm2_k20_f1/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_norm2_k20_f2/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_norm2_k20_f3/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_norm2_k20_f4/*.sh); do sbatch $s; done;
+
+
+# check even smaller numbers
+
+python create_sbatch.py --job_name le_norm2_k20_f1 --loop_epochs 2 50 2 --options "--fset f_mot --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_norm2_k20_step2 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm2_k20_f2 --loop_epochs 2 50 2 --options "--fset f_mot_morph --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_norm2_k20_step2 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm2_k20_f3 --loop_epochs 2 50 2 --options "--fset f_mot_morph_dyn --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_norm2_k20_step2 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm2_k20_f4 --loop_epochs 2 50 2 --options "--fset f_mot_morph_dyn_2 --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_norm2_k20_step2 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_norm2_k20_step2/*.sh); do sbatch $s; done;
+
+
+#
+# 20220517
+#
+
+# less epochs makes sense
+# try another kernel_size set (k=15)
+# add more repeats
+
+python create_sbatch.py --job_name le_norm2_k15_f1 --loop_epochs 2 80 2 --options "--fset f_mot --kernel_size=15 --repeats=60" --sbatch_dir sbatch/le_norm2_k15_step2 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm2_k15_f2 --loop_epochs 2 80 2 --options "--fset f_mot_morph --kernel_size=15 --repeats=60" --sbatch_dir sbatch/le_norm2_k15_step2 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm2_k15_f4 --loop_epochs 2 80 2 --options "--fset f_mot_morph_dyn_2 --kernel_size=15 --repeats=60" --sbatch_dir sbatch/le_norm2_k15_step2 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+
+
+python create_sbatch.py --job_name le_norm2_k20_f1 --loop_epochs 2 50 2 --options "--fset f_mot --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_norm2_k20_step2b --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm2_k20_f2 --loop_epochs 2 50 2 --options "--fset f_mot_morph --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_norm2_k20_step2b --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_norm2_k20_f4 --loop_epochs 2 50 2 --options "--fset f_mot_morph_dyn_2 --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_norm2_k20_step2b --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_norm2_k20_step2b/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_norm2_k15_step2/*.sh); do sbatch $s; done;
+
+
+#
+# 20220629
+#
+
+# First test of LAXCAT
+
+python create_sbatch.py --job_name le_laxcat_1 --loop_epochs 2 500 10 --options "--fset f_mot --kernel_size=20 --nfilters=32 --repeats=30" --sbatch_dir sbatch/le_laxcat_1 --prog /proj/hajaalin/Projects/n_track_ML/scripts/tsc/cv_laxcat.py --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+
+#
+# 20220922
+#
+
+# try and see what happens with less features
+
+python create_sbatch.py --job_name le_k20_fset_x --loop_epochs 2 80 2 --options "--fset f_x --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_k20_fset_x --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_k20_fset_y --loop_epochs 2 80 2 --options "--fset f_y --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_k20_fset_y --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_k20_fset_xy --loop_epochs 2 80 2 --options "--fset f_xy --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_k20_fset_xy --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_k20_fset_morph --loop_epochs 2 80 2 --options "--fset f_morph --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_k20_fset_morph --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_k20_fset_area --loop_epochs 2 80 2 --options "--fset f_area --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_k20_fset_area --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+python create_sbatch.py --job_name le_k20_fset_perim --loop_epochs 2 80 2 --options "--fset f_perim --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_k20_fset_perim --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+
+
+for s in $(ls sbatch/le_k20_fset_x/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_fset_y/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_fset_xy/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_fset_morph/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_fset_area/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_fset_perim/*.sh); do sbatch $s; done;
+
+python create_sbatch.py --job_name le_k20_fset_mindist --loop_epochs 2 80 2 --options "--fset f_mindist --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_k20_fset_mindist --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_k20_fset_mindist/*.sh); do sbatch $s; done;
+
+
+##
+## 2022-09-28
+##
+
+# SHAP
+
+python create_sbatch.py --job_name SHAP_k20_f_xy --options "--fset f_xy --kernel_size=20 --epochs=50 --repeats=30" --sbatch_dir sbatch/SHAP --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+
+## normalization recheck!
+python create_sbatch.py --job_name le_k20_fset_xy_normcheck --loop_epochs 2 80 2 --options "--fset f_xy --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_k20_fset_xy_normcheck --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_k20_fset_xy_normcheck/*.sh); do sbatch $s; done;
+
+python create_sbatch.py --job_name le_k20_fset_mot_normcheck --loop_epochs 2 80 2 --options "--fset f_mot --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_k20_fset_mot_normcheck --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+python create_sbatch.py --job_name le_k20_fset_mot_morph_normcheck --loop_epochs 2 80 2 --options "--fset f_mot_morph --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_k20_fset_mot_morph_normcheck --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+python create_sbatch.py --job_name le_k20_fset_mot_morph_dyn_2_normcheck --loop_epochs 2 80 2 --options "--fset f_mot_morph_dyn_2 --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_k20_fset_mot_morph_dyn_2_normcheck --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_k20_fset_mot_normcheck/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_fset_mot_morph_normcheck/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_fset_mot_morph_dyn_2_normcheck/*.sh); do sbatch $s; done;
+
+# more epochs for f_mot_morph_dyn_2, our best shot at the moment
+python create_sbatch.py --job_name le_k20_fset_mot_morph_dyn_2_normcheck --loop_epochs 80 250 10 --options "--fset f_mot_morph_dyn_2 --kernel_size=20 --repeats=30" --sbatch_dir sbatch/le_k20_fset_mot_morph_dyn_2_normcheck2 --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_k20_fset_mot_morph_dyn_2_normcheck2/*.sh); do sbatch $s; done;
+
+
+# test cloning run code from github
+python create_sbatch.py --job_name le_k20_fset_mot_morph_dyn_2_normcheck --loop_epochs 80 250 10 --options "--fset f_mot_morph_dyn_2 --kernel_size=20 --repeats=30" --sbatch_dir sbatch/git_test --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+
+##
+## 2022-09-29
+##
+
+# added --test flag to run from current folder
+# without the flag, clone the branch from github
+python create_sbatch.py --branch laxcat --job_name git_test --loop_epochs 2 6 2 --options "--fset f_mot_morph_dyn_2 --kernel_size=20 --repeats=2" --sbatch_dir sbatch/git_test2 --test --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/git_test2/*.sh); do sbatch $s; done;
+# git commit...
+# git push origin...
+
+job="le_k20"
+fset="f_mot_morph_dyn_2"
+ts="20220929"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch laxcat --job_name $job_name --loop_epochs 2 80 2 --options "--fset $fset --kernel_size=20 --repeats=30" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_k20_f_mot_morph_dyn_2_20220929/*.sh); do sbatch $s; done;
+
+
+##
+## 20221003
+##
+
+# test without x and y
+
+job="le_k20"
+fset="f_dxy"
+ts="20221003"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch laxcat --job_name $job_name --loop_epochs 2 80 2 --options "--fset $fset --kernel_size=20 --repeats=30" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+job="le_k20"
+fset="f_dxy_angle"
+ts="20221003"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch laxcat --job_name $job_name --loop_epochs 2 80 2 --options "--fset $fset --kernel_size=20 --repeats=30" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+job="le_k20"
+fset="f_dxy_angle_morph"
+ts="20221003"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch laxcat --job_name $job_name --loop_epochs 2 80 2 --options "--fset $fset --kernel_size=20 --repeats=30" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+job="le_k20"
+fset="f_dxy_angle_morphd"
+ts="20221003"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch laxcat --job_name $job_name --loop_epochs 2 80 2 --options "--fset $fset --kernel_size=20 --repeats=30" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_k20_f_dxy_20221003/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_f_dxy_angle_20221003/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_f_dxy_angle_morph_20221003/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_f_dxy_angle_morphd_20221003/*.sh); do sbatch $s; done;
+
+
+# forgot mindist
+
+job="le_k20"
+fset="f_dxy_mindist"
+ts="20221003"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch laxcat --job_name $job_name --loop_epochs 2 80 2 --options "--fset $fset --kernel_size=20 --repeats=30" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+job="le_k20"
+fset="f_dxy_mindist_angle"
+ts="20221003"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch laxcat --job_name $job_name --loop_epochs 2 80 2 --options "--fset $fset --kernel_size=20 --repeats=30" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+job="le_k20"
+fset="f_dxy_mindist_angle_morph"
+ts="20221003"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch laxcat --job_name $job_name --loop_epochs 2 80 2 --options "--fset $fset --kernel_size=20 --repeats=30" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+job="le_k20"
+fset="f_dxy_angle_area"
+ts="20221003"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch laxcat --job_name $job_name --loop_epochs 2 80 2 --options "--fset $fset --kernel_size=20 --repeats=30" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+job="le_k20"
+fset="f_dxy_mindist_angle_area"
+ts="20221003"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch laxcat --job_name $job_name --loop_epochs 2 80 2 --options "--fset $fset --kernel_size=20 --repeats=30" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/le_k20_f_dxy_mindist_20221003/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_f_dxy_mindist_angle_20221003/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_f_dxy_mindist_angle_morph_20221003/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_f_dxy_angle_area_20221003/*.sh); do sbatch $s; done;
+for s in $(ls sbatch/le_k20_f_dxy_mindist_angle_area_20221003/*.sh); do sbatch $s; done;
+
+
+##
+## 2022-10-05
+##
+
+srun --interactive -c4 --mem=4G -t04:00:00 -pgpu-oversub -Mukko --pty bash
+bash sbatch/SHAP/sbatch_shap_1.sh
+
+
+##
+## 2022-10-12
+##
+
+# test getting inceptiontime from github
+
+job="test_git_it"
+fset="f_dxy_mindist_angle_area"
+ts="20221012"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --test --branch_n laxcat --job_name $job_name --loop_epochs 2 6 2 --options "--fset $fset --kernel_size=20 --repeats=2" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/test_git_it_f_dxy_mindist_angle_area_20221012/*.sh); do sbatch $s; done;
+
+
+##
+## 2022-10-13
+##
+
+job="test_git_it"
+fset="f_dxy_mindist_angle_area"
+ts="20221013"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch_i master --branch_n laxcat --job_name $job_name --loop_epochs 2 6 2 --options "--fset $fset --kernel_size=20 --repeats=2" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/test_git_it_f_dxy_mindist_angle_area_20221013/*.sh); do sbatch $s; done;
+
+
+job="test_it_tf_fix"
+fset="f_dxy_mindist_angle_area"
+ts="20221013"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --test --branch_i master --branch_n laxcat --job_name $job_name --loop_epochs 2 6 2 --options "--fset $fset --kernel_size=20 --repeats=2" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/test_it_tf_fix_f_dxy_mindist_angle_area_20221013/*.sh); do sbatch $s; done;
+
+
+# check that epoch loop still looks ok
+
+job="le_k20"
+fset="f_dxy_mindist_angle_area"
+ts="20221013"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch_i master --branch_n laxcat --job_name $job_name --loop_epochs 2 50 2 --options "--fset $fset --kernel_size=20 --repeats=30" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/$job_name/*.sh); do sbatch $s; done;
+
+
+
+##
+## 2022-10-20
+##
+
+# installed Miniconda3 in /proj/groups/lmu/software
+# env 'tsc' now has everything, tensorflow, cuda, jinja, shap...
+# let's see if it works...
+
+job="test_proj_lmu"
+fset="f_dxy_mindist_angle_area"
+ts="20221020"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --test --branch_i master --branch_n laxcat --job_name $job_name --loop_epochs 2 50 2 --options "--fset $fset --kernel_size=20 --repeats=30" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for s in $(ls sbatch/$job_name/*.sh); do sbatch $s; done;
+
+
+##
+## 2022-10-25
+##
+
+# test saving shap values
+
+job="test_save_shap"
+fset="f_dxy_mindist_angle_area"
+ts="20221027"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --test --branch_i master --branch_n laxcat --job_name $job_name --options "--fset $fset --kernel_size=20 --epochs=3 --repeats=3 --save_shap_values" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+
+
+##
+## 2022-11-01
+##
+
+# mass-produce shap values
+
+# only 1 repeat in per job
+
+job="save_shap"
+fset="f_dxy_mindist_angle_area"
+ts="20221101"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --test --branch_i master --branch_n laxcat --job_name $job_name --options "--fset $fset --kernel_size=20 --epochs=20 --repeats=1 --save_shap_values" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for i in {1..45}
+do
+echo $i
+sbatch sbatch/save_shap_f_dxy_mindist_angle_area_20221101/sbatch_save_shap_f_dxy_mindist_angle_area_20221101.sh
+done
+
+
+##
+## 2022-11-02
+##
+
+# test 
+
+job="test_save_shap"
+fset="f_dxy_mindist_angle_area"
+ts="20221102"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --test --branch_i master --branch_n laxcat --job_name $job_name --options "--fset $fset --kernel_size=20 --epochs=2 --repeats=1 --save_shap_values" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+# run after commit and push
+
+job="save_shap"
+fset="f_dxy_mindist_angle_area"
+ts="20221102"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch_i master --branch_n proj_group_lmu --job_name $job_name --options "--fset $fset --kernel_size=20 --epochs=20 --repeats=1 --save_shap_values" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for i in {1..50}
+do
+echo $i
+sbatch sbatch/save_shap_f_dxy_mindist_angle_area_20221102/sbatch_save_shap_f_dxy_mindist_angle_area_20221102.sh
+done
+
+
+##
+## 2022-11-03
+##
+
+# save X_test and accuracy lists, run more repetitions
+
+job="test_save_X_test"
+fset="f_dxy_mindist_angle_area"
+ts="20221103"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --test --branch_i master --branch_n save_X_test --job_name $job_name --options "--fset $fset --kernel_size=20 --epochs=20 --repeats=20" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+srun --interactive -c4 --mem=4G -t04:00:00 -pgpu-oversub -Mukko --pty bash
+bash sbatch/test_save_X_test_f_dxy_mindist_angle_area_20221103/sbatch_test_save_X_test_f_dxy_mindist_angle_area_20221103.sh
+
+# repeat many times, save accuracy
+
+job="save_X_test"
+fset="f_dxy_mindist_angle_area"
+ts="20221103"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch_i master --branch_n save_X_test --job_name $job_name --options "--fset $fset --kernel_size=20 --epochs=20 --repeats=200" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for i in {1..50}
+do
+echo $i
+sbatch sbatch/save_X_test_f_dxy_mindist_angle_area_20221103/sbatch_save_X_test_f_dxy_mindist_angle_area_20221103.sh
+done
+
+## bummer, that saved X_test, wanted to save only the index
+
+job="test_save_X_test2"
+fset="f_dxy_mindist_angle_area"
+ts="20221103"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --test --branch_i master --branch_n save_X_test --job_name $job_name --options "--fset $fset --kernel_size=20 --epochs=20 --repeats=20" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+# repeat many times ... (4*50*50)
+
+job="save_X_test2"
+fset="f_dxy_mindist_angle_area"
+ts="20221103"
+job_name="${job}_${fset}_${ts}"
+echo $job_name
+python create_sbatch.py --branch_i master --branch_n save_X_test --job_name $job_name --options "--fset $fset --kernel_size=20 --epochs=20 --repeats=50" --sbatch_dir sbatch/$job_name --paths /proj/hajaalin/Projects/n_track_ML/scripts/tsc/paths.yml
+
+for i in {1..50}
+do
+echo $i
+sbatch sbatch/save_X_test2_f_dxy_mindist_angle_area_20221103/sbatch_save_X_test2_f_dxy_mindist_angle_area_20221103.sh
+done
+
+

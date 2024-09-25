@@ -1,0 +1,15 @@
+
+src:
+  inceptiontime: "/proj/hajaalin/Projects/InceptionTime"
+
+output:
+  cv: "/proj/hajaalin/Projects/n_track_ML/output/cross-validation"
+  it: "/wrk/users/hajaalin/output/TSC/InceptionTime/"
+  shap: "/wrk/group/lmu/projects/n_track_ML/output/shap"
+
+log:
+  tsc: "/proj/hajaalin/Projects/n_track_ML/output/log"
+
+data:
+  dir: "/proj/hajaalin/Projects/n_track_ML/data"
+  raw_data_file: "63455ea_data_chromatin_live.csv"

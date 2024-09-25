@@ -1,0 +1,15 @@
+etl:
+  raw_data_file: "63455ea_data_chromatin_live.csv"
+  processed_data: "63455ea_data_chromatin_live_nested"
+
+kneighbors:
+  n_neighbors: 5
+  repeats: 20
+
+rocket:
+  repeats: 20
+
+output:
+  csv: "cv_sktime_20220510.csv"
+
+
