@@ -1,3 +1,5 @@
+[![DOI](https://img.shields.io/badge/DOI-10.7554%2FeLife.108797-green)](https://doi.org/10.7554/eLife.108797)
+
 # chromatin-tracking-exploration
 
 Python scripts for microscopy image analysis. 
